@@ -4,8 +4,10 @@ import "./App.css";
 import Home from "./pages/Home/Home";
 import Profile from "./pages/Profile/Profile";
 import Explore from "./pages/Explore/Explore";
-import Signin from "./pages/Signin/Signin";
+import Login from "./pages/Login/Login";
 import Navbar from "./Components/Navbar/Navbar";
+import Register from "./pages/Register/Regsiter";
+import Error from "./pages/Error/Error";
 
 const Layout = () => {
   return (
@@ -19,6 +21,7 @@ const Layout = () => {
 const router = createBrowserRouter([
   {
     path: "/",
+    errorElement: <Error />,
     element: <Layout />,
     children: [
       {
@@ -34,12 +37,12 @@ const router = createBrowserRouter([
         element: <Explore />,
       },
       {
-        path: "/signin",
-        element: <Signin />,
+        path: "/login",
+        element: <Login />,
       },
       {
-        path: "/signout",
-        element: <Signin />,
+        path: "/register",
+        element: <Register />,
       },
     ],
   },

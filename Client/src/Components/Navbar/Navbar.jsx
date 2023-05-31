@@ -5,7 +5,7 @@ import StarBorderPurple500Icon from "@mui/icons-material/StarBorderPurple500";
 const Navbar = () => {
   return (
     <>
-      <div className="grid grid-col-1 md:grid-cols-4 my-5 justify-center">
+      <div className="grid grid-cols-1 md:grid-cols-4 my-4 justify-center">
         <div className="mx-auto md:mx-0">
           <img
             src="https://img.icons8.com/?size=512&id=13963&format=png"

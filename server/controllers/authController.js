@@ -6,11 +6,18 @@ const loginController = async (req, res) => {
     const { email, password } = req.body;
     const user = await userModel.find({ email, password });
     if (!user) {
-      res.status(404).send({
+      return res.status(200).send({
         success: false,
         message: `Invalid Credentials`,
       });
     }
+    // if (user.password !== password) {
+    //   return res.status(200).send({
+    //     success: false,
+    //     message: `Invalid Credentials`,
+    //   });
+    // }
+
     res.status(200).send({
       success: true,
       message: `Login Successful`,
@@ -28,7 +35,15 @@ const loginController = async (req, res) => {
 
 const registerController = async (req, res) => {
   try {
-    const newUser = userModel(req.body);
+    const existingUser = await userModel.findOne({ email: req.body.email });
+
+    if (existingUser) {
+      return res.status(200).send({
+        message: "User Already Exist",
+        success: false,
+      });
+    }
+    const newUser = new userModel(req.body);
     await newUser.save();
     res.status(201).send({
       success: true,

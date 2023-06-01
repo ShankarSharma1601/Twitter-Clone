@@ -1,8 +1,13 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { hideLoading, showLoading } from "../../redux/features/alertSlice";
 import axios from "axios";
 
 const Register = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,14 +16,21 @@ const Register = () => {
     e.preventDefault();
 
     try {
+      dispatch(showLoading());
       const res = await axios.post("api/v1/auth/register", {
         username,
         email,
         password,
       });
-      console.log("res", res);
+      dispatch(hideLoading());
+      console.log(res);
+      dispatch(setUser(res.data.user));
+      alert(res.data.message);
+      navigate("/");
     } catch (error) {
+      dispatch(hideLoading());
       console.log(error);
+      alert("Something Went Wrong");
     }
   };
   return (

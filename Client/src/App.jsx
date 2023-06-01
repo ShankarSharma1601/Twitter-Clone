@@ -6,7 +6,7 @@ import Profile from "./pages/Profile/Profile";
 import Explore from "./pages/Explore/Explore";
 import Login from "./pages/Login/Login";
 import Navbar from "./Components/Navbar/Navbar";
-import Register from "./pages/Register/Regsiter";
+import Register from "./pages/Register/Register";
 import Error from "./pages/Error/Error";
 
 const Layout = () => {

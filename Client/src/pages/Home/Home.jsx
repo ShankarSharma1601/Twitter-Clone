@@ -1,23 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import LeftSidebar from "../../Components/LeftSidebar/LeftSidebar";
 import RightSidebar from "../../Components/RightSIdebar/RightSidebar";
 import MainTweet from "../../Components/MainTweet/MainTweet";
-
-import { useSelector } from "react-redux";
 import Login from "../Login/Login";
+import { useSelector } from "react-redux";
 
 const Home = () => {
-  const { user } = useSelector((state) => state.user);
-
-  const [localuser, setLocaluser] = useState(null);
-
-  useEffect(() => {
-    setLocaluser(user);
-  }, [user, localuser]);
-
+  const { currentUser } = useSelector((state) => state.user);
   return (
     <>
-      {!localuser ? (
+      {!currentUser ? (
         <Login />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-4">

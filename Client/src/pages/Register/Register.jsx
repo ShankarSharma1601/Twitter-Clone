@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../../redux/features/alertSlice";
 import axios from "axios";
+import { loginFailed, loginStart, loginSuccess } from "../../redux/userSlice";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -14,21 +14,18 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
+    dispatch(loginStart());
     try {
-      dispatch(showLoading());
       const res = await axios.post("api/v1/auth/register", {
         username,
         email,
         password,
       });
-      dispatch(hideLoading());
-      console.log(res);
-      dispatch(setUser(res.data.user));
-      alert(res.data.message);
-      navigate("/");
+      dispatch(loginSuccess(res.data));
+      alert("Register Successful");
+      navigate("/login");
     } catch (error) {
-      dispatch(hideLoading());
+      dispatch(loginFailed());
       console.log(error);
       alert("Something Went Wrong");
     }

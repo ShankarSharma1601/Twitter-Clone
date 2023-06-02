@@ -1,12 +1,12 @@
-const express = require("express");
-const {
+import express from "express";
+import {
   createTweet,
   deleteTweet,
   likeOrDislike,
   getAllTweets,
   getUserTweets,
   getExploreTweets,
-} = require("../controllers/tweetController");
+} from "../controllers/tweetController.js";
 const router = express.Router();
 
 // Routes
@@ -26,6 +26,6 @@ router.get("/timeline/:id", getAllTweets);
 router.get("/user/all/:id", getUserTweets);
 
 // explore
-router.all.get("/explore", getExploreTweets);
+router.get("/explore", getExploreTweets);
 
-module.exports = router;
+export default router;

@@ -1,31 +1,27 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../../redux/features/alertSlice";
 import axios from "axios";
-import { setUser } from "../../redux/features/userSlice";
+import { loginFailed, loginStart, loginSuccess } from "../../redux/userSlice";
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+    dispatch(loginStart());
     try {
-      dispatch(showLoading());
-      const res = await axios.post("api/v1/auth/login", { email, password });
-      dispatch(hideLoading());
+      const res = await axios.post("api/v1/auth/login", { username, password });
+      dispatch(loginSuccess(res.data));
       console.log(res);
-
-      dispatch(setUser(res.data.user));
-      alert(res.data.message);
+      alert("Login Successful");
       navigate("/");
     } catch (error) {
-      dispatch(hideLoading());
+      dispatch(loginFailed());
       console.log(error);
       alert("Something Went Wrong");
     }
@@ -35,9 +31,9 @@ const Login = () => {
       <h2 className="text-3xl font-bold text-center">Sign in</h2>
 
       <input
-        type="email"
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="email"
+        type="text"
+        onChange={(e) => setUsername(e.target.value)}
+        placeholder="username"
         className="text-xl py-2 rounded-full px-4"
       />
       <input

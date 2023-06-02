@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 // tweet Schema
 const tweetSchema = new mongoose.Schema(
@@ -17,11 +17,11 @@ const tweetSchema = new mongoose.Schema(
       defaultValue: [],
     },
   },
-  { timeStamps: true }
+  { timestamps: true }
 );
 
 // model
 const tweetModel = mongoose.model("Tweet", tweetSchema);
 
 // export
-module.exports = tweetModel;
+export default tweetModel;

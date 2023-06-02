@@ -1,63 +1,52 @@
-const userModel = require("../models/userModel");
-const bcrypt = require("bcryptjs");
+import userModel from "../models/userModel.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { handleError } from "../error.js";
 
-const loginController = async (req, res) => {
+export const loginController = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-    const user = await userModel.find({ email, password });
+    const user = await userModel.findOne({ username: req.body.username });
     if (!user) {
-      return res.status(200).send({
-        success: false,
-        message: `Invalid Credentials`,
-      });
+      return next(handleError(404, "User not found"));
     }
-    // if (user.password !== password) {
-    //   return res.status(200).send({
-    //     success: false,
-    //     message: `Invalid Credentials`,
-    //   });
-    // }
 
-    res.status(200).send({
-      success: true,
-      message: `Login Successful`,
-      user,
-    });
+    const isCorrect = await bcrypt.compare(req.body.password, user.password);
+
+    if (!isCorrect) return next(handleError(400, "Incorrect Credentials"));
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT);
+    const { password, ...othersData } = user._doc;
+
+    res
+      .cookie("access_token", token, { httpOnly: true })
+      .status(200)
+      .json(othersData);
   } catch (error) {
     console.log(error);
-    res.status(400).send({
-      success: false,
-      message: `Error while Login`,
-      error,
-    });
+    next(error);
   }
 };
 
-const registerController = async (req, res) => {
+export const registerController = async (req, res, next) => {
   try {
-    const existingUser = await userModel.findOne({ email: req.body.email });
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(req.body.password, salt);
 
-    if (existingUser) {
-      return res.status(200).send({
-        message: "User Already Exist",
-        success: false,
-      });
-    }
-    const newUser = new userModel(req.body);
+    const newUser = new userModel({ ...req.body, password: hash });
     await newUser.save();
-    res.status(201).send({
-      success: true,
-      message: `Register Successful`,
-      newUser,
-    });
+
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT);
+
+    const { password, ...othersData } = newUser._doc;
+
+    res
+      .cookie("access_token", token, {
+        httpOnly: true,
+      })
+      .status(200)
+      .json(othersData);
   } catch (error) {
     console.log(error);
-    res.status(400).send({
-      success: false,
-      message: `Error while Register`,
-      error,
-    });
+    next(error);
   }
 };
-
-module.exports = { loginController, registerController };

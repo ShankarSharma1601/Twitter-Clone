@@ -7,7 +7,7 @@ const UserPlaceholder = ({ setUserData, userData }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userProfile = await axios.get(`api/v1/users/find/${id}`);
+        const userProfile = await axios.get(`/api/v1/users/find/${id}`);
         setUserData(userProfile.data);
       } catch (error) {
         console.log(error);

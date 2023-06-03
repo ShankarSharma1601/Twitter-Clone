@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import LeftSidebar from "../../Components/LeftSidebar/LeftSidebar";
 import RightSidebar from "../../Components/RightSIdebar/RightSidebar";
+import EditProfile from "../../Components/EditProfile/EditProfile";
 
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -46,7 +47,7 @@ const Profile = () => {
       }
     } else {
       try {
-        const follow = await axios.put(`/api/v1/users/unfollow/${id}`, {
+        const unfollow = await axios.put(`/api/v1/users/unfollow/${id}`, {
           id: currentUser._id,
         });
 
@@ -64,11 +65,13 @@ const Profile = () => {
         </div>
         <div className="col-span-2 border-x-2 border-t-slate-800 px-6">
           <div className="flex justify-between items-center">
-            <img
+            {/* <img
               src={userProfile?.profilePicture}
-              alt="Profile Pic"
+              alt="ProfilePic"
               className="w-12 h-12 rounded-full"
-            />
+            /> */}
+            {/* <h2>{currentUser.username}</h2> */}
+            <h2>@{currentUser.username}</h2>
 
             {currentUser._id === id ? (
               <button

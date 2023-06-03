@@ -85,3 +85,15 @@ export const unfollow = async (req, res, next) => {
     next(err);
   }
 };
+
+export const imageUploadController = async (req, res, next) => {
+  try {
+    // user
+    const user = await userModel.findByIdAndUpdate(req.params.id);
+    user.profilePicture = req.body;
+    await user.save();
+    res.status(200).json("Image Upload Successfully");
+  } catch (error) {
+    next(error);
+  }
+};

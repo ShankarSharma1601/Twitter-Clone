@@ -60,7 +60,7 @@ export const getAllTweets = async (req, res, next) => {
 export const getUserTweets = async (req, res, next) => {
   try {
     const userTweets = await tweetModel.find({ userId: req.params.id }).sort({
-      createAt: -1,
+      createdAt: -1,
     });
 
     res.status(200).json(userTweets);
